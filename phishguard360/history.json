@@ -1,0 +1,8 @@
+[
+    {
+        "email_user": "dasrupsha356@gmail.com",
+        "email": "Subject: Urgent! Your account will be blocked\n\nDear user,\n\nClick this link immediately to verify your bank account or it will be suspended.\n\nhttp://fake-link.com",
+        "result": "\u26a0\ufe0f Phishing Detected!\n\nReasons:\n- Suspicious word found: \"urgent\"\n- Suspicious word found: \"immediately\"\n- Suspicious word found: \"verify\"\n- Suspicious word found: \"suspend\"\n- Suspicious word found: \"account\"\n- Suspicious word found: \"bank\"\n- Contains URL link",
+        "date": "2026-03-27 21:46"
+    }
+]

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/profile.css">
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+    <span>🛡️ PhishGuard 360</span>
+    <div>
+        <a href="/" class="nav-btn active">🔍 Analyzer</a>
+        <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+        <a href="/profile" class="nav-btn">👤 Profile</a>
+        {% if session['user'] == 'admin@gmail.com' %}
+        <a href="/admin" class="nav-btn">⚙️ Admin</a>
+        {% endif %}
+        <span class="welcome-text">{{ session['name'] }}</span>
+        <a href="/logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+
+    <!-- PROFILE CONTAINER -->
+    <div class="profile-container">
+
+        <h1>👤 My Profile</h1>
+        <p class="subtitle">Apni details update karo</p>
+
+        <!-- PROFILE CARD -->
+        <div class="profile-card">
+
+            <!-- AVATAR -->
+            <div class="avatar-section">
+                <div class="avatar">
+                    {{ session['name'][0].upper() }}
+                </div>
+                <h2>{{ session['name'] }}</h2>
+                <p>{{ session['user'] }}</p>
+            </div>
+
+            <!-- STATS -->
+            <div class="profile-stats">
+                <div class="pstat">
+                    <h3>{{ stats.total }}</h3>
+                    <p>Total Analyzed</p>
+                </div>
+                <div class="pstat">
+                    <h3>{{ stats.phishing }}</h3>
+                    <p>Phishing Found</p>
+                </div>
+                <div class="pstat">
+                    <h3>{{ stats.safe }}</h3>
+                    <p>Safe Emails</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- UPDATE FORM -->
+        <div class="update-section">
+
+            <!-- SUCCESS / ERROR -->
+            {% if success %}
+            <p class="success-msg">✅ {{ success }}</p>
+            {% endif %}
+            {% if error %}
+            <p class="error-msg">⚠️ {{ error }}</p>
+            {% endif %}
+
+            <!-- UPDATE NAME & EMAIL -->
+            <div class="form-card">
+                <h3>✏️ Profile Update karo</h3>
+                <form action="/profile/update" method="POST">
+                    <label>Full Name</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        value="{{ user.name }}"
+                        required
+                    >
+
+                    <label>Email</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        value="{{ user.email }}"
+                        required
+                    >
+
+                    <button type="submit" class="update-btn">
+                        💾 Update Profile
+                    </button>
+                </form>
+            </div>
+
+            <!-- CHANGE PASSWORD -->
+            <div class="form-card">
+                <h3>🔒 Password Change karo</h3>
+                <form action="/profile/change-password" method="POST">
+                    <label>Current Password</label>
+                    <input 
+                        type="password" 
+                        name="current_password" 
+                        placeholder="Current password"
+                        required
+                    >
+
+                    <label>New Password</label>
+                    <input 
+                        type="password" 
+                        name="new_password" 
+                        placeholder="New password"
+                        required
+                    >
+
+                    <label>Confirm New Password</label>
+                    <input 
+                        type="password" 
+                        name="confirm_password" 
+                        placeholder="Confirm new password"
+                        required
+                    >
+
+                    <button type="submit" class="password-btn">
+                        🔐 Change Password
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

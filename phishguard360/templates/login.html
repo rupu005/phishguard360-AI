@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Login</title>
+    <link rel="stylesheet" href="/static/login.css">
+</head>
+<body>
+
+    <div class="login-container">
+
+        <!-- LOGO / TITLE -->
+        <h1>🛡️ PhishGuard 360</h1>
+        <p class="subtitle">Phishing Detection System</p>
+
+        <!-- LOGIN FORM -->
+        <form action="/login" method="POST">
+
+            <!-- EMAIL -->
+            <label for="email">Email</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="Enter your email"
+                required
+            >
+
+            <!-- PASSWORD -->
+            <label for="password">Password</label>
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="Enter your password"
+                required
+            >
+
+            <!-- ERROR MESSAGE (Flask se aayega) -->
+            {% if error %}
+            <p class="error-msg">⚠️ {{ error }}</p>
+            {% endif %}
+
+            <!-- LOGIN BUTTON -->
+            <button type="submit" class="login-btn">Login</button>
+
+        </form>
+
+        <!-- FOOTER -->
+        <div class="login-footer">
+            <a href="/signup">Register now</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

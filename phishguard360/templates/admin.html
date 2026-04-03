@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Admin Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>🛡️ PhishGuard 360</span>
+        <div>
+            <a href="/" class="nav-btn">🔍 Analyzer</a>
+            <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+            <a href="/profile" class="nav-btn">👤 Profile</a>
+            <a href="/admin" class="nav-btn active">⚙️ Admin</a>
+            <span class="welcome-text">{{ session['name'] }}</span>
+            <a href="/logout" class="logout-btn">🚪 Logout</a>
+        </div>
+    </div>
+
+    <div class="admin-container">
+
+        <h1>⚙️ Admin Panel</h1>
+        <p class="subtitle">Sabhi users aur activity dekho</p>
+
+        <div class="stats-grid">
+            <div class="stat-card total">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3>{{ stats.total_users }}</h3>
+                    <p>Total Users</p>
+                </div>
+            </div>
+            <div class="stat-card phishing">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <h3>{{ stats.total_phishing }}</h3>
+                    <p>Total Phishing</p>
+                </div>
+            </div>
+            <div class="stat-card safe">
+                <div class="stat-icon">📧</div>
+                <div class="stat-info">
+                    <h3>{{ stats.total_emails }}</h3>
+                    <p>Total Emails</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h2>👥 All Users</h2>
+
+            {% if success %}
+            <p class="success-msg">✅ {{ success }}</p>
+            {% endif %}
+            {% if error %}
+            <p class="error-msg">⚠️ {{ error }}</p>
+            {% endif %}
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Emails Analyzed</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div class="user-avatar-small">
+                                {{ user.name[0].upper() }}
+                            </div>
+                            {{ user.name }}
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <span class="count-badge">
+                                {{ user.email_count }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if user.email != session['user'] %}
+                            <a href="/admin/delete/{{ user.id }}"
+                               class="delete-btn"
+                               onclick="return confirm('Yeh user delete karna chahte ho?')">
+                                🗑️ Delete
+                            </a>
+                            {% else %}
+                            <span class="you-badge">👑 You</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-section">
+            <h2>📋 All Email History</h2>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Email Preview</th>
+                        <th>Result</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.email_user }}</td>
+                        <td class="email-preview">
+                            {{ item.email_text[:50] }}...
+                        </td>
+                        <td>
+                            {% if 'Phishing' in item.result %}
+                            <span class="badge danger">⚠️ Phishing</span>
+                            {% else %}
+                            <span class="badge safe">✅ Safe</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+
+    <div class="top-bar">
+    <span>🛡️ PhishGuard 360</span>
+    <div>
+        <a href="/" class="nav-btn active">🔍 Analyzer</a>
+        <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+        <a href="/profile" class="nav-btn">👤 Profile</a>
+        {% if session['user'] == 'admin@gmail.com' %}
+        <a href="/admin" class="nav-btn">⚙️ Admin</a>
+        {% endif %}
+        <span class="welcome-text">{{ session['name'] }}</span>
+        <a href="/logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+    <div class="dashboard-container">
+
+        <h1>📊 Dashboard</h1>
+        <p class="subtitle">Welcome back, {{ session['name'] }}!</p>
+
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+
+            <div class="stat-card total">
+                <div class="stat-icon">📧</div>
+                <div class="stat-info">
+                    <h3>{{ stats.total }}</h3>
+                    <p>Total Analyzed</p>
+                </div>
+            </div>
+
+            <div class="stat-card phishing">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <h3>{{ stats.phishing }}</h3>
+                    <p>Phishing Detected</p>
+                </div>
+            </div>
+
+            <div class="stat-card safe">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3>{{ stats.safe }}</h3>
+                    <p>Safe Emails</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="history-section">
+            <h2>🕒 Recent Analysis History</h2>
+
+            {% if history %}
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email Preview</th>
+                        <th>Result</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="email-preview">{{ item.email_text[:60] }}...</td>
+                        <td>
+                            {% if 'Phishing' in item.result %}
+                            <span class="badge danger">⚠️ Phishing</span>
+                            {% else %}
+                            <span class="badge safe">✅ Safe</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+            <div class="no-history">
+                <p>📭 Abhi tak koi email analyze nahi hua!</p>
+                <a href="/" class="analyze-btn">Email Analyze Karo</a>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+</html>

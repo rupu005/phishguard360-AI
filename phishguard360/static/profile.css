@@ -1,0 +1,250 @@
+
+.profile-container {
+    width: 70%;
+    margin: 40px auto;
+    color: #e5e7eb;
+}
+
+.profile-container h1 {
+    text-align: center;
+    color: #f3f4f6;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #9ca3af;
+    margin-bottom: 30px;
+}
+
+
+.profile-card {
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+
+.avatar-section {
+    text-align: center;
+    min-width: 150px;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    background: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    margin: 0 auto 15px auto;
+}
+
+.avatar-section h2 {
+    color: #f3f4f6;
+    margin: 0;
+    font-size: 20px;
+}
+
+.avatar-section p {
+    color: #9ca3af;
+    font-size: 13px;
+    margin: 5px 0 0 0;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 30px;
+    flex: 1;
+    justify-content: center;
+}
+
+.pstat {
+    text-align: center;
+    background: #111827;
+    padding: 20px 30px;
+    border-radius: 10px;
+}
+
+.pstat h3 {
+    font-size: 32px;
+    color: #3b82f6;
+    margin: 0;
+}
+
+.pstat p {
+    color: #9ca3af;
+    font-size: 13px;
+    margin: 5px 0 0 0;
+}
+
+.update-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-card {
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.form-card h3 {
+    color: #f3f4f6;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.form-card label {
+    display: block;
+    color: #d1d5db;
+    font-size: 13px;
+    margin-bottom: 6px;
+    margin-top: 14px;
+}
+
+.form-card input {
+    width: 100%;
+    padding: 10px 14px;
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    color: #e5e7eb;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-card input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* ---- BUTTONS ---- */
+.update-btn {
+    width: 100%;
+    padding: 11px;
+    margin-top: 20px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.update-btn:hover {
+    background: #2563eb;
+}
+
+.password-btn {
+    width: 100%;
+    padding: 11px;
+    margin-top: 20px;
+    background: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.password-btn:hover {
+    background: #d97706;
+}
+
+.success-msg {
+    color: #4ade80;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.error-msg {
+    color: #f87171;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+@media (max-width: 768px) {
+
+    .profile-container {
+        width: 92%;
+        margin: 20px auto;
+    }
+
+    .profile-container h1 {
+        font-size: 22px;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 30px;
+    }
+
+    .avatar-section h2 {
+        font-size: 18px;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .pstat {
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pstat h3 {
+        font-size: 24px;
+    }
+
+    .update-section {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .form-card {
+        padding: 18px;
+    }
+
+    .form-card h3 {
+        font-size: 15px;
+    }
+
+    .form-card input {
+        padding: 9px 12px;
+        font-size: 13px;
+    }
+
+    .update-btn,
+    .password-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+}

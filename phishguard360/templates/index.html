@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Email Detector</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<!-- 🔷 TOP BAR -->
+<div class="top-bar">
+    <span>🛡️ PhishGuard 360 AI Security</span>
+
+    <div>
+        <a href="/" class="nav-btn active">🔍 Analyzer</a>
+        <a href="/dashboard" class="nav-btn">📊 Dashboard</a>
+        <a href="/profile" class="nav-btn">👤 Profile</a>
+
+        {% if session.get('user') == 'admin@gmail.com' %}
+        <a href="/admin" class="nav-btn">⚙️ Admin</a>
+        {% endif %}
+
+        <span class="welcome-text">{{ session['name'] }}</span>
+        <a href="/logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<!-- 🔷 MAIN -->
+<div class="container">
+
+    <h1>Phishing Email Detector</h1>
+
+    <!-- INPUT -->
+    <textarea id="emailInput" placeholder="Paste email here..." rows="8"></textarea>
+
+    <!-- BUTTON -->
+    <button onclick="analyzeEmail()">Analyze Email</button>
+
+    <!-- LOADING -->
+    <div id="loading" style="display:none;">
+        <div class="spinner"></div>
+        <p>⏳ AI is analyzing your email...</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="progressBar" style="display:none;">
+        <div class="progress"></div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="results" style="display:none;">
+        <h3>Analysis Result:</h3>
+        <pre id="resultText"></pre>
+    </div>
+
+    <!-- RISK METER -->
+    <div id="riskMeter" style="display:none;">
+        <p>Risk Level:</p>
+        <div class="meter">
+            <div id="meterFill"></div>
+        </div>
+    </div>
+
+    <!-- EXPORT -->
+    <button id="exportBtn" style="display:none;" onclick="exportResult()">
+        Export PDF
+    </button>
+
+</div>
+
+<!-- 🔷 JAVASCRIPT -->
+<script>
+
+// Session check
+fetch('/check_session')
+.then(res => res.json())
+.then(data => {
+    if (!data.logged_in) {
+        window.location.href = '/login';
+    }
+});
+
+// 🔊 SOUND
+function playPhishingSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.3, 0.6].forEach(time => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+
+        o.connect(g);
+        g.connect(audioCtx.destination);
+
+        o.type = 'square';
+        o.frequency.setValueAtTime(440, audioCtx.currentTime + time);
+
+        g.gain.setValueAtTime(0.3, audioCtx.currentTime + time);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + time + 0.2);
+
+        o.start(audioCtx.currentTime + time);
+        o.stop(audioCtx.currentTime + time + 0.2);
+    });
+}
+
+function playSafeSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+
+    o.connect(g);
+    g.connect(audioCtx.destination);
+
+    o.type = 'sine';
+    o.frequency.setValueAtTime(523, audioCtx.currentTime);
+    o.frequency.setValueAtTime(659, audioCtx.currentTime + 0.1);
+    o.frequency.setValueAtTime(784, audioCtx.currentTime + 0.2);
+
+    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+
+    o.start(audioCtx.currentTime);
+    o.stop(audioCtx.currentTime + 0.5);
+}
+
+// 🚀 ANALYZE
+function analyzeEmail() {
+
+    const emailText = document.getElementById('emailInput').value;
+
+    if (!emailText.trim()) {
+        alert('Please paste an email first!');
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('progressBar').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('exportBtn').style.display = 'none';
+    document.getElementById('riskMeter').style.display = 'none';
+
+    fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailText })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('progressBar').style.display = 'none';
+
+        const resultDiv = document.getElementById('results');
+        const text = document.getElementById('resultText');
+
+        resultDiv.style.display = 'block';
+        text.innerText = data.result;
+        text.classList.add('typing');
+
+        document.getElementById('exportBtn').style.display = 'block';
+        document.getElementById('riskMeter').style.display = 'block';
+
+        // 🎯 RESULT LOGIC
+        if (data.result.includes('Phishing')) {
+            resultDiv.className = 'phishing-box';
+            playPhishingSound();
+            document.getElementById('meterFill').style.width = '90%';
+            document.getElementById('meterFill').style.background = '#ef4444';
+        } else {
+            resultDiv.className = 'safe-box';
+            playSafeSound();
+            document.getElementById('meterFill').style.width = '20%';
+            document.getElementById('meterFill').style.background = '#22c55e';
+        }
+    })
+    .catch(err => {
+        document.getElementById('loading').style.display = 'none';
+        alert('Error: ' + err);
+    });
+}
+
+// 📄 EXPORT
+function exportResult() {
+    const emailText = document.getElementById('emailInput').value;
+    const result = document.getElementById('resultText').innerText;
+
+    fetch('/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailText, result: result })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'phishguard_report.pdf';
+        a.click();
+    });
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard 360 - Sign Up</title>
+    <link rel="stylesheet" href="/static/login.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>🛡️ PhishGuard 360</h1>
+        <p class="subtitle">Create New Account</p>
+
+        <form action="/signup" method="POST">
+
+            <label>Full Name</label>
+            <input 
+                type="text" 
+                name="name" 
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>Email</label>
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="Create password"
+                required
+            >
+
+            <label>Confirm Password</label>
+            <input 
+                type="password" 
+                name="confirm_password" 
+                placeholder="Confirm password"
+                required
+            >
+
+            {% if error %}
+            <p class="error-msg">⚠️ {{ error }}</p>
+            {% endif %}
+
+            {% if success %}
+            <p class="success-msg">✅ {{ success }}</p>
+            {% endif %}
+
+            <button type="submit" class="login-btn">Sign Up</button>
+
+        </form>
+
+        <div class="login-footer">
+            Already have account? <a href="/login">Login </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
